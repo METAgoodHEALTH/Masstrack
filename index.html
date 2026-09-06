@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>MassTrack Android Voice — Majd</title>
+<title>MassTrack V8 Achats Voice — Majd</title>
 <style>
 :root{--bg:#07111f;--panel:#102036;--panel2:#14283f;--text:#f7fbff;--muted:#9db0c8;--line:rgba(255,255,255,.09);--green:#62e6b4;--blue:#68a8ff;--amber:#f7c85c;--red:#ff7c8c;--r:19px;--shadow:0 18px 52px rgba(0,0,0,.28)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at 5% 0%,rgba(104,168,255,.14),transparent 28%),radial-gradient(circle at 95% 5%,rgba(98,230,180,.10),transparent 26%),linear-gradient(180deg,#07111f,#050a12 75%)}button,input,select{font:inherit}button{cursor:pointer}
@@ -21,7 +21,7 @@
 .quickgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.quick{border:1px solid var(--line);background:rgba(255,255,255,.035);color:var(--text);padding:11px;border-radius:13px;text-align:left}.quick strong{display:block}.quick span{font-size:11px;color:var(--muted)}
 .advice{border-left:4px solid var(--green);background:rgba(98,230,180,.07);padding:12px 13px;border-radius:12px;line-height:1.5}.advice.warn{border-left-color:var(--amber);background:rgba(247,200,92,.07)}.advice.danger{border-left-color:var(--red);background:rgba(255,124,140,.07)}
 .datebar,.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.datebox{padding:9px 12px;border:1px solid var(--line);border-radius:12px;font-weight:800}
-input,select{width:100%;border:1px solid var(--line);background:#091728;color:var(--text);padding:11px 12px;border-radius:12px;outline:none}input:focus,select:focus{border-color:rgba(98,230,180,.5);box-shadow:0 0 0 3px rgba(98,230,180,.08)}
+input,select,textarea{width:100%;border:1px solid var(--line);background:#091728;color:var(--text);padding:11px 12px;border-radius:12px;outline:none}input:focus,select:focus,textarea:focus{border-color:rgba(98,230,180,.5);box-shadow:0 0 0 3px rgba(98,230,180,.08)}
 .librarytools{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}.search{flex:1;min-width:220px}.foodgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.foodcard{padding:15px;display:flex;flex-direction:column;gap:10px}.foodtop{display:flex;justify-content:space-between;gap:8px}.foodcard h4{margin:0}.foodmeta{font-size:12px;color:var(--muted);line-height:1.5}.foodactions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto}.star{color:var(--amber)}
 .savedgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.savedcard{padding:16px}.savedcard h4{margin:0 0 8px}.saveditems{font-size:13px;color:var(--muted);line-height:1.55}
 .weightgrid{display:grid;grid-template-columns:1.2fr .8fr;gap:13px}.chart{height:280px;padding:14px}canvas{display:block;width:100%;height:100%}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}th{color:var(--muted)}
@@ -126,17 +126,30 @@ window.addEventListener("load", async () => {
 
   <div class="sectionhead"><div><h3>Ajout par la voix 🎙️</h3><p>Sélectionne le repas, parle naturellement, puis vérifie avant d’ajouter.</p></div></div>
   <div class="card voicepanel">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+      <span style="display:inline-flex;padding:6px 9px;border-radius:999px;border:1px solid rgba(98,230,180,.3);color:#62e6b4;font-size:12px;font-weight:900">🧠 Mode conversation naturelle</span>
+      <span style="font-size:12px;color:var(--muted)">Tu n’as plus besoin de dire « riz 200 g » comme un robot.</span>
+    </div>
     <div class="voicerow">
       <select id="voiceMeal"><option>Petit-déjeuner</option><option selected>Déjeuner</option><option>Collation</option><option>Après entraînement</option><option>Dîner</option></select>
-      <input id="voiceText" placeholder="Ex. 60 grammes de riz et 150 grammes de poulet">
+      <textarea id="voiceText" rows="3" placeholder="Parle normalement : « Bonjour, aujourd’hui au déjeuner j’ai mangé environ 200 g de riz avec 150 g de poulet, deux œufs et un yaourt. »"></textarea>
       <button class="voicebtn" id="voiceStart">🎙️ Parler</button>
     </div>
-    <div class="voicestatus" id="voiceStatus">Tu peux dire : « 60 grammes de riz et 150 grammes de poulet ». Les valeurs sont calculées à partir de ta bibliothèque, des références standards, puis d’Open Food Facts si nécessaire.</div>
+    <div class="voicestatus" id="voiceStatus">Mode conversation naturelle : parle comme avec ChatGPT. Exemple : « Aujourd’hui au déjeuner j’ai mangé environ 200 g de riz avec 150 g de poulet et deux œufs. » Je détecte le repas, les aliments et les quantités, puis je te montre ce que j’ai compris avant de l’ajouter.</div>
     <div class="voiceitems" id="voiceItems"></div>
     <div class="tools" id="voiceActions" style="display:none;margin-top:12px"><button class="btn primary" id="voiceAddAll">✅ Ajouter tout au repas</button><button class="btn" id="voiceRetry">↻ Recalculer</button></div>
   </div>
 
-  <div class="sectionhead"><div><h3>Recherche nutrition automatique</h3><p>Écris simplement ce que tu viens de manger.</p></div></div>
+  
+<div class="card" style="margin:12px 0;padding:14px;border:1px solid rgba(98,230,180,.25);background:rgba(98,230,180,.06)">
+  <strong style="color:#62e6b4">🛒 Tes achats sont déjà enregistrés</strong>
+  <div style="font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5">
+    Pepsi, poulet halal cru, emmental Milsani, skyr, lait Aldi, beurre de cacahuète, mayonnaise Heinz,
+    boisson Ginseng+, galettes de blé Aldi et concentré de tomate Jouda.
+  </div>
+</div>
+
+<div class="sectionhead"><div><h3>Recherche nutrition automatique</h3><p>Écris simplement ce que tu viens de manger.</p></div></div>
   <div class="card smartbox">
     <div class="smartrow">
       <input id="smartQuery" placeholder="Ex. huile d’olive 2 ml, riz cuit 250 g, Coca-Cola 50 cl…">
@@ -282,24 +295,34 @@ const OLD=["massTrackMajd_v2","massTrackMajd_v1"];
 const MEALS=["Petit-déjeuner","Déjeuner","Collation","Après entraînement","Dîner"];
 
 const BASE_FOODS=[
+/* === ACHATS DE MAJD — valeurs des étiquettes === */
+{id:"pepsi18_100",name:"Pepsi avec sucre — bouteille 1,5 L",unit:"100 ml",kcal:18,p:0,c:4.6,f:0,fav:true,builtin:true},
+{id:"chicken_halal_raw100",name:"Filet de poulet halal cru — poids avant cuisson",unit:"100 g",kcal:101,p:23,c:0.5,f:1,fav:true,builtin:true},
+{id:"emmental_milsani30",name:"Emmental français râpé Milsani",unit:"1 portion (30 g)",kcal:111,p:8.1,c:0,f:8.7,fav:true,builtin:true},
+{id:"skyr",name:"Skyr nature 0% — pot 850 g",unit:"100 g",kcal:56,p:9.3,c:3.6,f:0.5,fav:true,builtin:true},
+{id:"milk100",name:"Lait Aldi 1,6% MG",unit:"1 verre (250 ml)",kcal:117,p:8.3,c:12,f:4,fav:true,builtin:true},
+{id:"pb30",name:"Beurre de cacahuète Aldi",unit:"1 c. à soupe (15 g)",kcal:91,p:4.5,c:1.8,f:7.1,fav:true,builtin:true},
+{id:"mayo_heinz15",name:"Mayonnaise Heinz",unit:"1 c. à soupe (15 g)",kcal:96,p:0.1,c:0.3,f:10.5,fav:true,builtin:true},
+{id:"energy_ginseng500",name:"Boisson énergisante Ginseng+ — canette",unit:"1 canette (500 ml)",kcal:162,p:0.5,c:37,f:0.5,fav:true,builtin:true},
+{id:"wheat_wrap617",name:"Galette de blé précuite Aldi",unit:"1 galette (61,7 g)",kcal:191,p:6.1,c:32,f:4,fav:true,builtin:true},
+{id:"tomato_jouda100",name:"Concentré de tomate Jouda",unit:"100 g",kcal:135,p:4.71,c:15.5,f:0.85,fav:true,builtin:true},
+
+/* === PRODUITS DÉJÀ PRÉSENTS === */
 {id:"coffee_sugar",name:"Café + 1 sachet de sucre",unit:"1 portion",kcal:20,p:0,c:5,f:0,fav:true,builtin:true},
 {id:"bjorg_cajou",name:"Bjorg noix de cajou cranberry",unit:"1 barre (25 g)",kcal:132,p:4,c:9.8,f:7.8,fav:true,builtin:true},
-{id:"fish_maxi",name:"Burger 2 Fish Maxi",unit:"1 burger",kcal:689,p:28,c:55,f:30,fav:true,builtin:true},
-{id:"deluxe_potatoes",name:"Grande Deluxe Potatoes",unit:"1 portion",kcal:330,p:4,c:37,f:17,fav:true,builtin:true},
-{id:"coke50",name:"Coca-Cola classique 50 cl",unit:"50 cl",kcal:210,p:0,c:53,f:0,fav:true,builtin:true},
+{id:"fish_maxi",name:"Burger 2 Fish Maxi",unit:"1 burger",kcal:689,p:28,c:55,f:30,fav:false,builtin:true},
+{id:"deluxe_potatoes",name:"Grande Deluxe Potatoes",unit:"1 portion",kcal:330,p:4,c:37,f:17,fav:false,builtin:true},
+{id:"coke50",name:"Coca-Cola classique 50 cl",unit:"50 cl",kcal:210,p:0,c:53,f:0,fav:false,builtin:true},
 {id:"rice100",name:"Riz cuit",unit:"100 g",kcal:130,p:2.7,c:28,f:.3,fav:true,builtin:true},
-{id:"chicken100",name:"Poulet cuit",unit:"100 g",kcal:165,p:31,c:0,f:3.6,fav:true,builtin:true},
+{id:"chicken100",name:"Poulet cuit — valeur générique",unit:"100 g",kcal:165,p:31,c:0,f:3.6,fav:false,builtin:true},
 {id:"egg",name:"Œuf",unit:"1 œuf",kcal:72,p:6.3,c:.4,f:4.8,fav:true,builtin:true},
-{id:"hypermass65",name:"BioTechUSA Hyper Mass",unit:"65 g",kcal:254,p:20,c:38,f:2.2,fav:true,builtin:true},
-{id:"milk100",name:"Lait entier",unit:"100 ml",kcal:64,p:3.3,c:4.8,f:3.6,fav:true,builtin:true},
+{id:"hypermass65",name:"BioTechUSA Hyper Mass Vanille",unit:"65 g",kcal:254,p:20,c:38,f:1.4,fav:true,builtin:true},
 {id:"oats50",name:"Flocons d’avoine",unit:"50 g",kcal:190,p:6.5,c:31,f:3.5,fav:false,builtin:true},
-{id:"skyr",name:"Skyr",unit:"1 pot (150 g)",kcal:95,p:15,c:7,f:.5,fav:true,builtin:true},
-{id:"pb30",name:"Beurre de cacahuète",unit:"30 g",kcal:180,p:7.5,c:6,f:15,fav:false,builtin:true},
 {id:"berries100",name:"Fruits rouges",unit:"100 g",kcal:50,p:1,c:10,f:.5,fav:false,builtin:true},
 {id:"banana",name:"Banane",unit:"1 banane",kcal:105,p:1.3,c:27,f:.4,fav:false,builtin:true},
 {id:"nuggets100",name:"Nuggets",unit:"100 g",kcal:250,p:14,c:18,f:14,fav:false,builtin:true},
 {id:"tuna100",name:"Thon au naturel",unit:"100 g",kcal:116,p:26,c:0,f:1,fav:false,builtin:true},
-{id:"olive15",name:"Huile d’olive",unit:"1 c. à soupe",kcal:119,p:0,c:0,f:13.5,fav:false,builtin:true}
+{id:"olive15",name:"Huile d’olive",unit:"1 c. à soupe (15 ml)",kcal:119,p:0,c:0,f:13.5,fav:false,builtin:true}
 ];
 
 const DEFAULT={
@@ -322,7 +345,17 @@ function migrate(raw){
    kcal:safeNum(f.kcal),p:safeNum(f.p),c:safeNum(f.c),f:safeNum(f.f),
    fav:!!f.fav,builtin:!!f.builtin
  })):clone(BASE_FOODS);
- BASE_FOODS.forEach(b=>{if(!x.foods.some(f=>f.id===b.id||f.name===b.name))x.foods.push(clone(b))});
+ BASE_FOODS.forEach(b=>{
+   const idx=x.foods.findIndex(f=>f.id===b.id);
+   if(idx>=0){
+     if(x.foods[idx].builtin){
+       const wasFav=x.foods[idx].fav;
+       x.foods[idx]={...clone(b),fav:(b.fav||wasFav)};
+     }
+   }else if(!x.foods.some(f=>f.name===b.name)){
+     x.foods.push(clone(b));
+   }
+ });
  x.diary=(raw&&raw.diary)||{};
  x.weights=Array.isArray(raw&&raw.weights)?raw.weights:[];
  x.savedMeals=Array.isArray(raw&&raw.savedMeals)?raw.savedMeals:[];
@@ -698,24 +731,31 @@ async function smartSearch(){
 }
 
 
+
 let voiceRecognition=null;
 let voiceResults=[];
 let voiceTargetMeal="Déjeuner";
 let voiceLastTranscript="";
 
-const FR_NUM_UNITS={zero:0,un:1,une:1,deux:2,trois:3,quatre:4,cinq:5,six:6,sept:7,huit:8,neuf:9,dix:10,onze:11,douze:12,treize:13,quatorze:14,quinze:15,seize:16};
+const FR_NUM_UNITS={
+ zero:0,un:1,une:1,deux:2,trois:3,quatre:4,cinq:5,six:6,sept:7,huit:8,neuf:9,dix:10,
+ onze:11,douze:12,treize:13,quatorze:14,quinze:15,seize:16,dixsept:17,dixhuit:18,dixneuf:19
+};
 const FR_TENS={vingt:20,trente:30,quarante:40,cinquante:50,soixante:60};
+
 function parseFrenchNumberWords(text){
  const raw=normalizeText(text).replace(/-/g," ").trim();
  if(/^\d+(?:[.,]\d+)?$/.test(raw))return parseFloat(raw.replace(",","."));
- const toks=raw.split(/\s+/).filter(Boolean); if(!toks.length)return NaN;
+ const toks=raw.split(/\s+/).filter(Boolean);
+ if(!toks.length)return NaN;
  let total=0,current=0,used=false;
  for(let i=0;i<toks.length;i++){
    const t=toks[i];
    if(t in FR_NUM_UNITS){current+=FR_NUM_UNITS[t];used=true;continue}
-   if((t==="vingt"||t==="vingts") && current===4){current=80;used=true;continue}
+   if(t==="quatre" && (toks[i+1]==="vingt"||toks[i+1]==="vingts")){
+     current+=80;i++;used=true;continue;
+   }
    if(t in FR_TENS){current+=FR_TENS[t];used=true;continue}
-   if(t==="dix" && current>=60){current+=10;used=true;continue}
    if(t==="cent"||t==="cents"){current=(current||1)*100;used=true;continue}
    if(t==="mille"){total+=(current||1)*1000;current=0;used=true;continue}
    if(t==="et")continue;
@@ -723,16 +763,18 @@ function parseFrenchNumberWords(text){
  }
  return used?total+current:NaN;
 }
+
 function canonicalUnit(u){
  const n=normalizeText(u);
- if(/^(g|gramme|grammes)$/.test(n))return "g";
+ if(/^(g|gr|gramme|grammes)$/.test(n))return "g";
  if(/^(kg|kilo|kilos|kilogramme|kilogrammes)$/.test(n))return "kg";
  if(/^(ml|millilitre|millilitres)$/.test(n))return "ml";
  if(/^(cl|centilitre|centilitres)$/.test(n))return "cl";
  if(/^(l|litre|litres)$/.test(n))return "l";
- if(/^(barre|barres|piece|pieces|portion|portions|pot|pots|oeuf|oeufs)$/.test(n))return "piece";
+ if(/^(barre|barres|piece|pieces|portion|portions|pot|pots|oeuf|oeufs|canette|canettes|verre|verres|galette|galettes|cuillere|cuilleres|cuillere a soupe|cuilleres a soupe)$/.test(n))return "piece";
  return n;
 }
+
 function convertMeasure(value,unit,targetUnit){
  const u=canonicalUnit(unit),t=canonicalUnit(targetUnit);
  const mass={g:1,kg:1000},vol={ml:1,cl:10,l:1000};
@@ -740,132 +782,366 @@ function convertMeasure(value,unit,targetUnit){
  if(u in vol && t in vol)return value*vol[u]/vol[t];
  return null;
 }
+
 function parseFoodBaseUnit(unitText){
  const n=normalizeText(unitText);
  const m=n.match(/(\d+(?:[.,]\d+)?)\s*(kg|g|ml|cl|l)\b/);
  if(m)return {amount:parseFloat(m[1].replace(",",".")),unit:canonicalUnit(m[2])};
- if(/\b(oeuf|barre|burger|portion|pot|banane|piece)\b/.test(n))return {amount:1,unit:"piece"};
+ if(/\b(oeuf|barre|burger|portion|pot|banane|piece|canette|verre)\b/.test(n))return {amount:1,unit:"piece"};
  return {amount:1,unit:"piece"};
 }
-function cleanVoiceFoodName(x){
- return normalizeText(x)
-   .replace(/^(j ai mange|j ai pris|j ai bu|je mange|je prends|je bois|mange|manger|pris|prendre|bu|boire|ajoute|ajouter|mets|mettre)\s+/,"")
-   .replace(/^(de |du |des |d )/,"")
-   .replace(/\s+(et|puis|ensuite|avec)$/g,"")
+
+function detectMealFromSpeech(text){
+ const t=normalizeText(text);
+ const tests=[
+   {meal:"Petit-déjeuner",re:/\b(petit dejeuner|petit dej|au reveil|ce matin|matin)\b/},
+   {meal:"Déjeuner",re:/\b(dejeuner|a midi|ce midi|repas de midi)\b/},
+   {meal:"Collation",re:/\b(collation|gouter|a 16 h|a 16h|cet apres midi|dans l apres midi)\b/},
+   {meal:"Après entraînement",re:/\b(apres entrainement|apres la seance|post entrainement|post workout|apres le sport)\b/},
+   {meal:"Dîner",re:/\b(diner|ce soir|repas du soir|au soir)\b/}
+ ];
+ for(const x of tests)if(x.re.test(t))return x.meal;
+ return null;
+}
+
+function stripConversationFiller(text){
+ return normalizeText(text)
+   .replace(/[.!?;:]+/g," , ")
+   .replace(/\b(bonjour|salut|hello|chat|chatgpt|en fait|du coup|bah|ben|voila|voilà|aujourd hui|hier|demain)\b/g," ")
+   .replace(/\b(au petit dejeuner|au petit dej|ce matin|au dejeuner|a midi|ce midi|a la collation|au gouter|apres entrainement|apres la seance|au diner|ce soir)\b/g," ")
+   .replace(/\b(j ai mange|j ai pris|j ai bu|j ai consomme|je viens de manger|je viens de prendre|je viens de boire|je mange|je prends|je bois|mange|manger|pris|prendre|bu|boire|ajoute|ajouter|mets|mettre)\b/g," ")
+   .replace(/\b(environ|a peu pres|approximativement|presque)\b/g," ")
+   .replace(/\s+/g," ")
    .trim();
 }
-function splitVoiceTranscript(text){
- let t=normalizeText(text).replace(/\s*,\s*/g," ; ");
- const starts="(?:\\d+(?:[.,]\\d+)?|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|vingt|trente|quarante|cinquante|soixante|cent)";
- const re=new RegExp(`\\s+(?:et|puis|ensuite|avec)\\s+(?=${starts}\\b)`,`gi`);
- return t.split(/\s*;\s*/).flatMap(p=>p.split(re)).map(x=>x.trim()).filter(Boolean);
+
+function cleanVoiceFoodName(x){
+ return normalizeText(x)
+   .replace(/^[,\s]+|[,\s]+$/g,"")
+   .replace(/^(de |du |des |d |de la |de l |le |la |les |un |une )+/,"")
+   .replace(/\b(une portion|un portion|portion)\b/g," ")
+   .replace(/\b(un peu de|un peu d)\b/g," ")
+   .replace(/\s+/g," ")
+   .trim();
 }
-function parseVoiceItem(segment){
+
+function splitConversationalTranscript(text){
+ let t=stripConversationFiller(text);
+ // Keep "beurre de cacahuète" etc.; split only on conversational connectors.
+ t=t.replace(/\s*,\s*/g," ; ");
+ t=t.replace(/\s+(?:puis|ensuite|ainsi que|et aussi|plus)\s+/g," ; ");
+ t=t.replace(/\s+et\s+(?=(?:\d|un\b|une\b|deux\b|trois\b|quatre\b|cinq\b|six\b|sept\b|huit\b|neuf\b|dix\b|du\b|de la\b|des\b|un peu\b))/g," ; ");
+ t=t.replace(/\s+avec\s+/g," ; ");
+ return t.split(/\s*;\s*/).map(s=>s.trim()).filter(Boolean);
+}
+
+const NUMBER_EXPR = String.raw`(?:\d+(?:[.,]\d+)?|zero|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|vingt|trente|quarante|cinquante|soixante|cent|mille)(?:[\s-]+(?:et|un|une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze|treize|quatorze|quinze|seize|vingt|trente|quarante|cinquante|soixante|cent|mille))*`;
+const UNIT_EXPR = String.raw`(?:kg|kilos?|kilogrammes?|g|gr|grammes?|ml|millilitres?|cl|centilitres?|l|litres?|barres?|portions?|pieces?|pots?|oeufs?|canettes?|verres?|galettes?|cuilleres?(?:\s+a\s+soupe)?)`;
+
+function parseSegmentFlexible(segment){
  let s=cleanVoiceFoodName(segment);
- const units="kg|kilos?|kilogrammes?|g|grammes?|ml|millilitres?|cl|centilitres?|l|litres?|barres?|portions?|pieces?|pots?|oeufs?";
- const re=new RegExp(`^(.{1,28}?)\\s*(${units})\\s+(?:de\\s+|du\\s+|des\\s+|d\\s+)?(.+)$`,`i`);
- let m=s.match(re);
+
+ // "une portion de 200 grammes" -> quantity only, attach to previous food.
+ let m=s.match(new RegExp(`^(?:une\\s+)?portion\\s+(?:de\\s+)?(${NUMBER_EXPR})\\s*(${UNIT_EXPR})$`,"i"));
  if(m){
-   const qty=parseFrenchNumberWords(m[1]); if(Number.isFinite(qty))return {qty,unit:canonicalUnit(m[2]),name:cleanVoiceFoodName(m[3]),raw:segment};
+   const qty=parseFrenchNumberWords(m[1]);
+   if(Number.isFinite(qty))return {kind:"quantityOnly",qty,unit:canonicalUnit(m[2]),raw:segment};
  }
- // Reverse form: "riz 60 grammes"
- const rev=new RegExp(`^(.+?)\\s+(.{1,28}?)\\s*(${units})$`,`i`);m=s.match(rev);
- if(m){const qty=parseFrenchNumberWords(m[2]);if(Number.isFinite(qty))return {qty,unit:canonicalUnit(m[3]),name:cleanVoiceFoodName(m[1]),raw:segment};}
- // Count form: "2 oeufs", "une barre bjorg", "1 skyr"
- const count=s.match(/^(.{1,20}?)\s+(.+)$/);
- if(count){const qty=parseFrenchNumberWords(count[1]);if(Number.isFinite(qty))return {qty,unit:"piece",name:cleanVoiceFoodName(count[2]),raw:segment};}
- return {qty:null,unit:null,name:s,raw:segment,error:"Quantité non comprise"};
+
+ // "200 grammes de riz"
+ m=s.match(new RegExp(`^(${NUMBER_EXPR})\\s*(${UNIT_EXPR})\\s+(?:de\\s+|du\\s+|des\\s+|d\\s+|de la\\s+|de l\\s+)?(.+)$`,"i"));
+ if(m){
+   const qty=parseFrenchNumberWords(m[1]);
+   if(Number.isFinite(qty))return {kind:"food",qty,unit:canonicalUnit(m[2]),name:cleanVoiceFoodName(m[3]),raw:segment};
+ }
+
+ // "une portion de riz de 200 grammes"
+ m=s.match(new RegExp(`^(?:une\\s+)?portion\\s+(?:de\\s+)?(.+?)\\s+(?:de\\s+)?(${NUMBER_EXPR})\\s*(${UNIT_EXPR})$`,"i"));
+ if(m){
+   const qty=parseFrenchNumberWords(m[2]);
+   if(Number.isFinite(qty))return {kind:"food",qty,unit:canonicalUnit(m[3]),name:cleanVoiceFoodName(m[1]),raw:segment};
+ }
+
+ // "riz 200 grammes"
+ m=s.match(new RegExp(`^(.+?)\\s+(${NUMBER_EXPR})\\s*(${UNIT_EXPR})$`,"i"));
+ if(m){
+   const qty=parseFrenchNumberWords(m[2]);
+   if(Number.isFinite(qty))return {kind:"food",qty,unit:canonicalUnit(m[3]),name:cleanVoiceFoodName(m[1]),raw:segment};
+ }
+
+ // "riz avec une portion de 200 grammes" after connector normalization can still occur
+ m=s.match(new RegExp(`^(.+?)\\s+(?:une\\s+)?portion\\s+(?:de\\s+)?(${NUMBER_EXPR})\\s*(${UNIT_EXPR})$`,"i"));
+ if(m){
+   const qty=parseFrenchNumberWords(m[2]);
+   if(Number.isFinite(qty))return {kind:"food",qty,unit:canonicalUnit(m[3]),name:cleanVoiceFoodName(m[1]),raw:segment};
+ }
+
+ // "2 oeufs", "une barre Bjorg", "un skyr"
+ m=s.match(new RegExp(`^(${NUMBER_EXPR})\\s+(.+)$`,"i"));
+ if(m){
+   const qty=parseFrenchNumberWords(m[1]);
+   if(Number.isFinite(qty))return {kind:"food",qty,unit:"piece",name:cleanVoiceFoodName(m[2]),raw:segment};
+ }
+
+ // food only: "du riz", "poulet", "un yaourt"
+ const foodOnly=cleanVoiceFoodName(s);
+ if(foodOnly)return {kind:"food",qty:null,unit:null,name:foodOnly,raw:segment,missingQty:true};
+
+ return {kind:"unknown",raw:segment};
 }
+
+function conversationalItems(text){
+ const parts=splitConversationalTranscript(text);
+ const parsed=[];
+ for(const part of parts){
+   const item=parseSegmentFlexible(part);
+   if(item.kind==="quantityOnly" && parsed.length){
+     const prev=[...parsed].reverse().find(x=>x.kind==="food" && (x.qty==null || x.missingQty));
+     if(prev){prev.qty=item.qty;prev.unit=item.unit;prev.missingQty=false;continue}
+   }
+   parsed.push(item);
+ }
+ return parsed.filter(x=>x.kind==="food");
+}
+
 function fuzzyScore(query,label){
- const q=normalizeText(query).replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(x=>x.length>1&&!['de','du','des','la','le','les','un','une'].includes(x));
- const l=normalizeText(label).replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(x=>x.length>1&&!['de','du','des','la','le','les','un','une'].includes(x));
+ const STOP=['de','du','des','la','le','les','un','une','avec','portion','environ'];
+ const q=normalizeText(query).replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(x=>x.length>1&&!STOP.includes(x));
+ const l=normalizeText(label).replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(x=>x.length>1&&!STOP.includes(x));
  if(!q.length||!l.length)return 0;
- const qs=q.join(" "),ls=l.join(" ");if(qs===ls)return 100;if(ls.includes(qs)||qs.includes(ls))return 75;
+ const qs=q.join(" "),ls=l.join(" ");
+ if(qs===ls)return 100;
+ if(ls.includes(qs)||qs.includes(ls))return 82;
  const hit=q.filter(x=>l.some(y=>y===x||y.startsWith(x)||x.startsWith(y))).length;
- return hit/q.length*60;
+ return hit/q.length*70;
 }
+
 function findVoiceFood(name){
  let best=null,score=0;
- for(const f of state.foods){const sc=fuzzyScore(name,f.name);if(sc>score){score=sc;best=f}}
- return score>=34?{food:best,score}:null;
+ for(const f of state.foods){
+   const sc=fuzzyScore(name,f.name)+(f.fav?4:0);
+   if(sc>score){score=sc;best=f}
+ }
+ return score>=32?{food:best,score}:null;
 }
+
+function findGenericFood(name){
+ let best=null,score=0;
+ for(const g of GENERIC_NUTRITION){
+   for(const k of g.keys){
+     const sc=fuzzyScore(name,k);
+     if(sc>score){score=sc;best=g}
+   }
+ }
+ return score>=32?{generic:best,score}:null;
+}
+
+function inferPieceQuantity(parsed,f){
+ const base=parseFoodBaseUnit(f.unit);
+ if(parsed.qty==null && base.unit==="piece")return {...parsed,qty:1,unit:"piece",missingQty:false,inferred:true};
+ return parsed;
+}
+
 function resultFromStateFood(parsed,f){
- const base=parseFoodBaseUnit(f.unit),q=parsed.qty??1,u=parsed.unit||"piece";
+ parsed=inferPieceQuantity(parsed,f);
+ if(parsed.qty==null)return null;
+ const base=parseFoodBaseUnit(f.unit),q=parsed.qty,u=parsed.unit||"piece";
  let multiplier=null;
- if(u==="piece"&&base.unit==="piece")multiplier=q/base.amount;
- else{const converted=convertMeasure(q,u,base.unit);if(converted!==null)multiplier=converted/base.amount;}
+ const countableBase=/\b(canette|bouteille|verre|galette|barre|pot|portion|c\.?\s*a\s*soupe|cuillere)\b/.test(normalizeText(f.unit));
+ if(u==="piece"&&countableBase)multiplier=q;
+ else if(u==="piece"&&base.unit==="piece")multiplier=q/base.amount;
+ else{
+   const converted=convertMeasure(q,u,base.unit);
+   if(converted!==null)multiplier=converted/base.amount;
+ }
  if(multiplier===null)return null;
  const label=u==="piece"?`${q} ${q===1?"portion":"portions"}`:`${q} ${u}`;
- return {name:f.name,unitLabel:label,kcal:f.kcal*multiplier,p:f.p*multiplier,c:f.c*multiplier,f:f.f*multiplier,source:"Ta bibliothèque MassTrack",confidence:"élevée",parsed};
+ return {name:f.name,unitLabel:label,kcal:f.kcal*multiplier,p:f.p*multiplier,c:f.c*multiplier,f:f.f*multiplier,source:"Ta bibliothèque MassTrack",confidence:"élevée",parsed,inferred:!!parsed.inferred};
 }
+
 function resultFromGeneric(parsed){
- let best=null,score=0;
- for(const g of GENERIC_NUTRITION){for(const k of g.keys){const sc=fuzzyScore(parsed.name,k);if(sc>score){score=sc;best=g}}}
- if(!best||score<34)return null;
+ const hit=findGenericFood(parsed.name);
+ if(!hit)return null;
+ const best=hit.generic;
+ let p={...parsed};
+
+ // For inherently countable foods only.
+ if(p.qty==null && best.basis==="piece"){
+   p.qty=1;p.unit="piece";p.missingQty=false;p.inferred=true;
+ }
+ if(p.qty==null)return null;
+
  let grams;
- if(parsed.unit==="piece" && best.basis==="piece")grams=(parsed.qty||1)*(best.pieceG||50);
+ if(p.unit==="piece" && best.basis==="piece")grams=(p.qty||1)*(best.pieceG||50);
  else{
-   const qty=parsed.qty??100,unit=parsed.unit||"g";
-   if(["ml","cl","l"].includes(unit))grams=toGrams(qty,unit,best.density||1); else grams=toGrams(qty,unit,1);
+   const qty=p.qty,unit=p.unit||"g";
+   grams=toGrams(qty,unit,best.density||1);
  }
  if(!Number.isFinite(grams))return null;
- const factor=grams/100,label=parsed.unit==="piece"?`${parsed.qty||1} portion${(parsed.qty||1)>1?"s":""}`:`${parsed.qty??100} ${parsed.unit||"g"}`;
- return {name:best.name,unitLabel:label,kcal:best.kcal100*factor,p:best.p100*factor,c:best.c100*factor,f:best.f100*factor,source:"Référence nutritionnelle standard",confidence:"bonne",parsed};
+ const factor=grams/100;
+ const label=p.unit==="piece"?`${p.qty} portion${p.qty>1?"s":""}`:`${p.qty} ${p.unit}`;
+ return {name:best.name,unitLabel:label,kcal:best.kcal100*factor,p:best.p100*factor,c:best.c100*factor,f:best.f100*factor,source:"Référence nutritionnelle standard",confidence:"bonne",parsed:p,inferred:!!p.inferred};
 }
+
 async function resultFromOpenFoodFacts(parsed){
+ if(parsed.qty==null)return null;
  try{
-   const term=encodeURIComponent(parsed.name),url=`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${term}&search_simple=1&action=process&json=1&page_size=6&fields=product_name,brands,nutriments`;
-   const res=await fetch(url,{headers:{Accept:"application/json"}});if(!res.ok)return null;const data=await res.json();
-   const prod=(data.products||[]).find(p=>p.product_name&&Number.isFinite(Number(p.nutriments?.["energy-kcal_100g"])));if(!prod)return null;
-   const qty=parsed.qty??100,unit=parsed.unit||"g",grams=parsed.unit==="piece"?100:toGrams(qty,unit,1);if(!Number.isFinite(grams))return null;
-   const n=prod.nutriments||{},factor=grams/100,kcal=Number(n["energy-kcal_100g"]),p=Number(n.proteins_100g)||0,c=Number(n.carbohydrates_100g)||0,f=Number(n.fat_100g)||0;
-   return {name:(prod.product_name+(prod.brands?` — ${prod.brands}`:"" )).slice(0,120),unitLabel:`${qty} ${unit}`,kcal:kcal*factor,p:p*factor,c:c*factor,f:f*factor,source:"Open Food Facts — vérifie la marque",confidence:"à vérifier",parsed};
+   const term=encodeURIComponent(parsed.name);
+   const url=`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${term}&search_simple=1&action=process&json=1&page_size=6&fields=product_name,brands,nutriments`;
+   const res=await fetch(url,{headers:{Accept:"application/json"}});
+   if(!res.ok)return null;
+   const data=await res.json();
+   const prod=(data.products||[]).find(p=>p.product_name&&Number.isFinite(Number(p.nutriments?.["energy-kcal_100g"])));
+   if(!prod)return null;
+   const qty=parsed.qty,unit=parsed.unit||"g";
+   const grams=unit==="piece"?100:toGrams(qty,unit,1);
+   if(!Number.isFinite(grams))return null;
+   const n=prod.nutriments||{},factor=grams/100,kcal=Number(n["energy-kcal_100g"]);
+   return {
+     name:(prod.product_name+(prod.brands?` — ${prod.brands}`:"")).slice(0,120),
+     unitLabel:`${qty} ${unit}`,
+     kcal:kcal*factor,
+     p:(Number(n.proteins_100g)||0)*factor,
+     c:(Number(n.carbohydrates_100g)||0)*factor,
+     f:(Number(n.fat_100g)||0)*factor,
+     source:"Open Food Facts — vérifie la marque",
+     confidence:"à vérifier",
+     parsed
+   };
  }catch(e){return null}
 }
+
 async function resolveVoiceItem(parsed){
- if(parsed.error)return {...parsed,unresolved:true,source:parsed.error};
- const local=findVoiceFood(parsed.name);if(local){const r=resultFromStateFood(parsed,local.food);if(r)return r}
- const generic=resultFromGeneric(parsed);if(generic)return generic;
- const remote=await resultFromOpenFoodFacts(parsed);if(remote)return remote;
- return {...parsed,unresolved:true,source:"Aliment non trouvé"};
+ if(!parsed.name)return {...parsed,unresolved:true,source:"Aliment non compris"};
+
+ const local=findVoiceFood(parsed.name);
+ if(local){
+   const r=resultFromStateFood(parsed,local.food);
+   if(r)return r;
+   if(parsed.qty==null)return {...parsed,name:local.food.name,unresolved:true,missingQuantity:true,source:"Aliment reconnu, mais quantité manquante"};
+ }
+
+ const genericHit=findGenericFood(parsed.name);
+ if(genericHit){
+   const r=resultFromGeneric(parsed);
+   if(r)return r;
+   if(parsed.qty==null)return {...parsed,name:genericHit.generic.name,unresolved:true,missingQuantity:true,source:"Aliment reconnu, mais quantité manquante"};
+ }
+
+ if(parsed.qty!=null){
+   const remote=await resultFromOpenFoodFacts(parsed);
+   if(remote)return remote;
+ }
+ return {...parsed,unresolved:true,source:parsed.qty==null?"Quantité manquante ou aliment non trouvé":"Aliment non trouvé"};
 }
+
 function renderVoiceResults(){
  const box=$("voiceItems");box.innerHTML="";
  voiceResults.forEach((r,i)=>{
    const row=document.createElement("div");row.className="voiceitem";
-   if(r.unresolved){row.innerHTML=`<div><strong class="voicewarn">⚠️ ${esc(r.name||r.raw||"Aliment")}</strong><small>${esc(r.source)}. Modifie la phrase ou crée l’aliment dans « Mes aliments ».</small></div><button class="btn" data-i="${i}">Retirer</button>`;}
-   else{row.innerHTML=`<div><strong class="voiceok">✓ ${esc(r.name)}</strong><small>${esc(r.unitLabel)} • ${Math.round(r.kcal)} kcal • ${fmt(r.p,1)} g protéines • ${fmt(r.c,1)} g glucides • ${fmt(r.f,1)} g lipides<br>${esc(r.source)}</small></div><button class="btn" data-i="${i}">Retirer</button>`;}
-   row.querySelector("button").addEventListener("click",()=>{voiceResults.splice(i,1);renderVoiceResults()});box.appendChild(row);
+   if(r.unresolved){
+     const msg=r.missingQuantity?"Je l’ai reconnu, mais dis-moi combien tu en as mangé.":r.source;
+     row.innerHTML=`<div><strong class="voicewarn">⚠️ ${esc(r.name||r.raw||"Aliment")}</strong><small>${esc(msg)}</small></div><button class="btn" data-i="${i}">Retirer</button>`;
+   }else{
+     const inf=r.inferred?" • quantité estimée":"";
+     row.innerHTML=`<div><strong class="voiceok">✓ ${esc(r.name)}</strong><small>${esc(r.unitLabel)} • ${Math.round(r.kcal)} kcal • ${fmt(r.p,1)} g protéines • ${fmt(r.c,1)} g glucides • ${fmt(r.f,1)} g lipides${inf}<br>${esc(r.source)}</small></div><button class="btn" data-i="${i}">Retirer</button>`;
+   }
+   row.querySelector("button").addEventListener("click",()=>{voiceResults.splice(i,1);renderVoiceResults()});
+   box.appendChild(row);
  });
  $("voiceActions").style.display=voiceResults.length?"flex":"none";
 }
+
 async function processVoiceText(){
- const raw=$("voiceText").value.trim();voiceTargetMeal=$("voiceMeal").value;voiceLastTranscript=raw;
+ const raw=$("voiceText").value.trim();
  if(!raw){$("voiceStatus").textContent="Je n’ai rien à analyser.";return}
- $("voiceStatus").className="voicestatus live";$("voiceStatus").textContent="Analyse des aliments et des quantités…";voiceResults=[];renderVoiceResults();
- const parts=splitVoiceTranscript(raw);for(const part of parts){const parsed=parseVoiceItem(part);voiceResults.push(await resolveVoiceItem(parsed));renderVoiceResults()}
- const ok=voiceResults.filter(x=>!x.unresolved).length;$("voiceStatus").className="voicestatus";$("voiceStatus").textContent=`${ok} aliment${ok>1?"s":""} reconnu${ok>1?"s":""}. Vérifie les valeurs puis clique sur « Ajouter tout ». `;
+
+ const mealDetected=detectMealFromSpeech(raw);
+ if(mealDetected){
+   voiceTargetMeal=mealDetected;
+   $("voiceMeal").value=mealDetected;
+ }else{
+   voiceTargetMeal=$("voiceMeal").value;
+ }
+
+ voiceLastTranscript=raw;
+ $("voiceStatus").className="voicestatus live";
+ $("voiceStatus").textContent="🧠 Je comprends ta phrase comme une conversation…";
+ voiceResults=[];
+ renderVoiceResults();
+
+ const parsedItems=conversationalItems(raw);
+ for(const parsed of parsedItems){
+   voiceResults.push(await resolveVoiceItem(parsed));
+   renderVoiceResults();
+ }
+
+ const ok=voiceResults.filter(x=>!x.unresolved).length;
+ const missing=voiceResults.filter(x=>x.missingQuantity).length;
+ $("voiceStatus").className="voicestatus";
+ if(!voiceResults.length){
+   $("voiceStatus").textContent="Je n’ai pas réussi à identifier les aliments. Essaie une phrase naturelle avec au moins les noms des aliments.";
+ }else{
+   $("voiceStatus").textContent=`J’ai compris ${ok} aliment${ok>1?"s":""}${mealDetected?` pour « ${mealDetected} »`:""}${missing?` ; ${missing} quantité${missing>1?"s":""} à préciser`:""}. Vérifie puis valide.`;
+ }
 }
+
 function addVoiceResults(){
- const valid=voiceResults.filter(r=>!r.unresolved);if(!valid.length){alert("Aucun aliment reconnu à ajouter.");return}
+ const valid=voiceResults.filter(r=>!r.unresolved);
+ if(!valid.length){alert("Aucun aliment complet à ajouter.");return}
  state.diary[selectedDate]=entries();
- valid.forEach(r=>state.diary[selectedDate].push({entryId:"voice_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),foodId:null,name:r.name,unit:r.unitLabel,qty:1,kcal:r.kcal,p:r.p,c:r.c,f:r.f,meal:voiceTargetMeal}));
- save();$("voiceStatus").textContent=`Ajouté dans « ${voiceTargetMeal} » ✅`;voiceResults=[];renderVoiceResults();renderJournal();showView("journal");
+ valid.forEach(r=>state.diary[selectedDate].push({
+   entryId:"voice_"+Date.now()+"_"+Math.random().toString(36).slice(2,7),
+   foodId:null,name:r.name,unit:r.unitLabel,qty:1,kcal:r.kcal,p:r.p,c:r.c,f:r.f,meal:voiceTargetMeal
+ }));
+ save();
+ $("voiceStatus").textContent=`Ajouté dans « ${voiceTargetMeal} » ✅`;
+ voiceResults=[];
+ renderVoiceResults();
+ renderJournal();
+ showView("journal");
 }
+
 function voiceSupported(){return !!(window.SpeechRecognition||window.webkitSpeechRecognition)}
-function startVoiceForMeal(meal){voiceTargetMeal=meal;$("voiceMeal").value=meal;showView("home");setTimeout(startVoice,120)}
+function startVoiceForMeal(meal){
+ voiceTargetMeal=meal;$("voiceMeal").value=meal;showView("home");setTimeout(startVoice,120);
+}
 function startVoice(){
  voiceTargetMeal=$("voiceMeal").value;
  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SR){$("voiceStatus").className="voicestatus voicewarn";$("voiceStatus").textContent="La dictée vocale n’est pas disponible dans ce navigateur. Utilise Google Chrome ou Microsoft Edge, puis autorise le microphone.";return}
- try{if(voiceRecognition)voiceRecognition.abort()}catch(e){}
- const rec=new SR();voiceRecognition=rec;rec.lang="fr-FR";rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
- let finalText="";const btn=$("voiceStart");btn.classList.add("listening");btn.textContent="⏹️ J’écoute…";$("voiceStatus").className="voicestatus live";$("voiceStatus").textContent=`J’écoute pour « ${voiceTargetMeal} »… Dis par exemple : 60 grammes de riz et 150 grammes de poulet.`;
- rec.onresult=e=>{let interim="";for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)finalText+=(finalText?" ":"")+t;else interim+=t}$("voiceText").value=(finalText+(interim?" "+interim:"")).trim()};
- rec.onerror=e=>{$("voiceStatus").className="voicestatus voicewarn";$("voiceStatus").textContent=e.error==="not-allowed"?"Microphone refusé. Autorise le micro dans Chrome/Edge puis réessaie.":`Erreur micro : ${e.error}. Tu peux aussi écrire la phrase.`};
- rec.onend=async()=>{btn.classList.remove("listening");btn.textContent="🎙️ Parler";voiceRecognition=null;if($("voiceText").value.trim())await processVoiceText()};
- rec.start();
+ if(!SR){
+   $("voiceStatus").className="voicestatus voicewarn";
+   $("voiceStatus").textContent="La dictée vocale n’est pas disponible dans ce navigateur. Utilise Google Chrome puis autorise le microphone.";
+   return;
  }
+ try{if(voiceRecognition)voiceRecognition.abort()}catch(e){}
+ const rec=new SR();voiceRecognition=rec;
+ rec.lang="fr-FR";rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
+ let finalText="";
+ const btn=$("voiceStart");
+ btn.classList.add("listening");btn.textContent="⏹️ J’écoute…";
+ $("voiceStatus").className="voicestatus live";
+ $("voiceStatus").textContent="🎙️ Parle normalement, comme avec ChatGPT. Exemple : « Aujourd’hui au déjeuner j’ai mangé 200 grammes de riz avec 150 grammes de poulet et deux œufs. »";
+ rec.onresult=e=>{
+   let interim="";
+   for(let i=e.resultIndex;i<e.results.length;i++){
+     const t=e.results[i][0].transcript;
+     if(e.results[i].isFinal)finalText+=(finalText?" ":"")+t;
+     else interim+=t;
+   }
+   $("voiceText").value=(finalText+(interim?" "+interim:"")).trim();
+ };
+ rec.onerror=e=>{
+   $("voiceStatus").className="voicestatus voicewarn";
+   $("voiceStatus").textContent=e.error==="not-allowed"?"Microphone refusé. Autorise le micro pour ce site dans Chrome puis réessaie.":`Erreur micro : ${e.error}.`;
+ };
+ rec.onend=async()=>{
+   btn.classList.remove("listening");btn.textContent="🎙️ Parler";voiceRecognition=null;
+   if($("voiceText").value.trim())await processVoiceText();
+ };
+ rec.start();
+}
+
 
 function renderAll(){greeting();renderHome();renderJournal();renderFoods();renderSaved();renderProgress();renderSettings()}
 
@@ -913,7 +1189,7 @@ $("smartQuery").addEventListener("keydown",e=>{if(e.key==="Enter")smartSearch()}
 
 $("topVoice").addEventListener("click",()=>{showView("home");setTimeout(startVoice,100)});
 $("voiceStart").addEventListener("click",startVoice);
-$("voiceText").addEventListener("keydown",e=>{if(e.key==="Enter")processVoiceText()});
+$("voiceText").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey))processVoiceText()});
 $("voiceAddAll").addEventListener("click",addVoiceResults);
 $("voiceRetry").addEventListener("click",processVoiceText);
 
