@@ -1,9 +1,8 @@
 {
-  "name": "MassTrack Majd V8 Achats",
+  "name": "MassTrack Majd V10 Calendrier",
   "short_name": "MassTrack",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#07111f",
-  "theme_color": "#07111f",
-  "description": "Suivi quotidien de prise de masse avec dictée vocale."
+  "theme_color": "#07111f"
 }

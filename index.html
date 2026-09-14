@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07111f">
-<title>MassTrack V8 Achats Voice — Majd</title>
+<title>MassTrack V10 Calendrier Voice — Majd</title>
 <style>
 :root{--bg:#07111f;--panel:#102036;--panel2:#14283f;--text:#f7fbff;--muted:#9db0c8;--line:rgba(255,255,255,.09);--green:#62e6b4;--blue:#68a8ff;--amber:#f7c85c;--red:#ff7c8c;--r:19px;--shadow:0 18px 52px rgba(0,0,0,.28)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at 5% 0%,rgba(104,168,255,.14),transparent 28%),radial-gradient(circle at 95% 5%,rgba(98,230,180,.10),transparent 26%),linear-gradient(180deg,#07111f,#050a12 75%)}button,input,select{font:inherit}button{cursor:pointer}
@@ -21,6 +21,9 @@
 .quickgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.quick{border:1px solid var(--line);background:rgba(255,255,255,.035);color:var(--text);padding:11px;border-radius:13px;text-align:left}.quick strong{display:block}.quick span{font-size:11px;color:var(--muted)}
 .advice{border-left:4px solid var(--green);background:rgba(98,230,180,.07);padding:12px 13px;border-radius:12px;line-height:1.5}.advice.warn{border-left-color:var(--amber);background:rgba(247,200,92,.07)}.advice.danger{border-left-color:var(--red);background:rgba(255,124,140,.07)}
 .datebar,.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.datebox{padding:9px 12px;border:1px solid var(--line);border-radius:12px;font-weight:800}
+.day-summary{margin:0 0 14px;padding:15px 16px;border:1px solid rgba(104,168,255,.2);background:linear-gradient(135deg,rgba(104,168,255,.08),rgba(98,230,180,.05));border-radius:17px}.day-summary-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:11px}.day-summary-head h4{margin:0;font-size:17px}.day-summary-head small{color:var(--muted)}.daymetrics{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.daymetric{padding:12px;border:1px solid var(--line);border-radius:13px;background:rgba(7,17,31,.45)}.daymetric .dlabel{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.daymetric .dvalue{font-size:22px;font-weight:950;margin-top:3px}.daymetric .dsub{font-size:11px;color:var(--muted);margin-top:2px}.calendar-shell{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:13px}.calendar-card{padding:18px}.calendar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:14px}.calendar-title{font-size:22px;font-weight:950;text-transform:capitalize}.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.cal-weekday{text-align:center;color:var(--muted);font-size:11px;font-weight:900;padding:5px 0;text-transform:uppercase}.cal-day{position:relative;min-height:82px;border:1px solid var(--line);background:rgba(255,255,255,.025);color:var(--text);border-radius:13px;padding:9px;text-align:left}.cal-day:hover{border-color:rgba(98,230,180,.35);background:rgba(98,230,180,.055)}.cal-day.out{opacity:.28}.cal-day.today{box-shadow:inset 0 0 0 1px rgba(104,168,255,.65)}.cal-day.selected{border-color:var(--green);background:rgba(98,230,180,.10)}.cal-num{font-size:15px;font-weight:950}.cal-kcal{display:block;margin-top:14px;font-size:11px;color:var(--green);font-weight:900}.cal-prot{display:block;font-size:10px;color:var(--muted);margin-top:2px}.cal-dot{position:absolute;right:8px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--green)}.calendar-side{display:grid;gap:12px;align-content:start}.calendar-side .card{padding:16px}.calendar-empty{color:var(--muted);font-size:13px;line-height:1.5}.calendar-meals{display:grid;gap:7px;margin-top:10px}.calendar-meal-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:12px}.calendar-meal-row:first-child{border-top:0}.calendar-meal-row span:last-child{font-weight:900;color:var(--green)}
+@media(max-width:900px){.calendar-shell{grid-template-columns:1fr}.daymetrics{grid-template-columns:repeat(2,1fr)}.cal-day{min-height:68px;padding:7px}.cal-kcal{margin-top:9px}}
+@media(max-width:520px){.calendar-grid{gap:4px}.cal-day{min-height:55px;border-radius:10px;padding:6px}.cal-kcal{font-size:9px}.cal-prot{display:none}.calendar-title{font-size:18px}}
 input,select,textarea{width:100%;border:1px solid var(--line);background:#091728;color:var(--text);padding:11px 12px;border-radius:12px;outline:none}input:focus,select:focus,textarea:focus{border-color:rgba(98,230,180,.5);box-shadow:0 0 0 3px rgba(98,230,180,.08)}
 .librarytools{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px}.search{flex:1;min-width:220px}.foodgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.foodcard{padding:15px;display:flex;flex-direction:column;gap:10px}.foodtop{display:flex;justify-content:space-between;gap:8px}.foodcard h4{margin:0}.foodmeta{font-size:12px;color:var(--muted);line-height:1.5}.foodactions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto}.star{color:var(--amber)}
 .savedgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.savedcard{padding:16px}.savedcard h4{margin:0 0 8px}.saveditems{font-size:13px;color:var(--muted);line-height:1.55}
@@ -76,13 +79,14 @@ window.addEventListener("load", async () => {
 <body>
 <div class="app">
 <aside class="sidebar">
-  <div class="brand"><div class="logo">M</div><div><h1>MassTrack Voice</h1><small>Prise de masse • Majd</small></div></div>
+  <div class="brand"><div class="logo">M</div><div><h1>MassTrack Calendar</h1><small>Prise de masse • Majd</small></div></div>
   <nav class="nav">
     <button data-view="home" class="active">🏠 Accueil</button>
     <button data-view="journal">🍽️ Journal</button>
     <button data-view="foods">📚 Mes aliments</button>
     <button data-view="saved">⭐ Repas favoris</button>
     <button data-view="progress">📈 Progression</button>
+    <button data-view="calendar">🗓️ Calendrier</button>
     <button data-view="settings">⚙️ Réglages</button>
   </nav>
   <div class="sidefoot"><button class="btn" id="sideImport">Importer ancienne version</button><button class="btn" id="sideExport">Sauvegarder</button></div>
@@ -141,11 +145,22 @@ window.addEventListener("load", async () => {
   </div>
 
   
+
+<div class="card" style="margin:12px 0;padding:14px;border:1px solid rgba(255,210,80,.25);background:rgba(255,210,80,.05)">
+  <strong style="color:#ffd56a">🍽️ Règles repas de Majd</strong>
+  <div style="font-size:12px;color:var(--muted);margin-top:5px;line-height:1.55">
+    Banane + avoine + beurre de cacahuète : uniquement dans un shake.<br>
+    Concentré de tomate : uniquement comme ingrédient de sauce/recette, jamais seul.<br>
+    Emmental : à intégrer dans un vrai plat (wrap, omelette, pâtes…), pas à manger comme repas.<br>
+    Les plans ne doivent pas ajouter d’aliments que tu n’as pas indiqué avoir.
+  </div>
+</div>
+
 <div class="card" style="margin:12px 0;padding:14px;border:1px solid rgba(98,230,180,.25);background:rgba(98,230,180,.06)">
   <strong style="color:#62e6b4">🛒 Tes achats sont déjà enregistrés</strong>
   <div style="font-size:12px;color:var(--muted);margin-top:5px;line-height:1.5">
     Pepsi, poulet halal cru, emmental Milsani, skyr, lait Aldi, beurre de cacahuète, mayonnaise Heinz,
-    boisson Ginseng+, galettes de blé Aldi et concentré de tomate Jouda.
+    boisson Ginseng+, galettes de blé Aldi, concentré de tomate Jouda, fruits rouges surgelés et riz thaï cru.
   </div>
 </div>
 
@@ -168,6 +183,15 @@ window.addEventListener("load", async () => {
     <div><h3>Journal alimentaire</h3><p>Modifie aussi les jours précédents.</p></div>
     <div class="datebar"><button class="btn" id="prevDay">←</button><span id="journalDate" class="datebox"></span><button class="btn" id="nextDay">→</button><button class="btn" id="todayBtn">Aujourd’hui</button></div>
   </div>
+  <div id="journalDaySummary" class="day-summary">
+    <div class="day-summary-head"><div><h4 id="journalSummaryTitle">Résumé du jour</h4><small id="journalSummaryHint">Totaux de la journée sélectionnée</small></div></div>
+    <div class="daymetrics">
+      <div class="daymetric"><div class="dlabel">Calories</div><div class="dvalue" id="journalSumKcal">0</div><div class="dsub" id="journalSumKcalSub"></div></div>
+      <div class="daymetric"><div class="dlabel">Protéines</div><div class="dvalue"><span id="journalSumP">0</span> g</div><div class="dsub" id="journalSumPSub"></div></div>
+      <div class="daymetric"><div class="dlabel">Glucides</div><div class="dvalue"><span id="journalSumC">0</span> g</div><div class="dsub">total de la journée</div></div>
+      <div class="daymetric"><div class="dlabel">Poids</div><div class="dvalue"><span id="journalSumW">—</span> kg</div><div class="dsub" id="journalSumWSub">aucune pesée</div></div>
+    </div>
+  </div>
   <div class="journal">
     <div class="stack" id="meals"></div>
     <aside class="stack">
@@ -178,6 +202,37 @@ window.addEventListener("load", async () => {
   </div>
 </section>
 
+<section class="view" id="view-calendar">
+  <div class="sectionhead">
+    <div><h3>Calendrier nutrition</h3><p>Clique sur un jour pour voir immédiatement calories, protéines, glucides et poids.</p></div>
+    <button class="btn" id="calendarTodayBtn">Aujourd’hui</button>
+  </div>
+  <div class="calendar-shell">
+    <div class="card calendar-card">
+      <div class="calendar-toolbar">
+        <button class="btn" id="calPrevMonth">←</button>
+        <div class="calendar-title" id="calendarMonthTitle"></div>
+        <button class="btn" id="calNextMonth">→</button>
+      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+    <aside class="calendar-side">
+      <div class="day-summary" style="margin:0">
+        <div class="day-summary-head"><div><h4 id="calendarSummaryTitle">Résumé</h4><small>Clique sur une date du calendrier</small></div></div>
+        <div class="daymetrics">
+          <div class="daymetric"><div class="dlabel">Calories</div><div class="dvalue" id="calSumKcal">0</div><div class="dsub" id="calSumKcalSub"></div></div>
+          <div class="daymetric"><div class="dlabel">Protéines</div><div class="dvalue"><span id="calSumP">0</span> g</div><div class="dsub" id="calSumPSub"></div></div>
+          <div class="daymetric"><div class="dlabel">Glucides</div><div class="dvalue"><span id="calSumC">0</span> g</div><div class="dsub">total journalier</div></div>
+          <div class="daymetric"><div class="dlabel">Poids</div><div class="dvalue"><span id="calSumW">—</span> kg</div><div class="dsub" id="calSumWSub">aucune pesée</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h4 style="margin:0">Repas du jour</h4><button class="btn" id="openSelectedJournal">Ouvrir le journal</button></div>
+        <div id="calendarMeals" class="calendar-meals"></div>
+      </div>
+    </aside>
+  </div>
+</section>
 <section class="view" id="view-foods">
   <div class="sectionhead"><div><h3>Mes aliments</h3><p>⭐ Favori • ✏️ Modifier • 🗑️ Supprimer.</p></div><button class="btn primary" id="newFood">+ Nouvel aliment</button></div>
   <div class="bluebox" style="margin-bottom:12px">C’est ici que tu modifies toute ta liste. Les favoris apparaissent en premier quand tu ajoutes un aliment.</div>
@@ -230,6 +285,7 @@ window.addEventListener("load", async () => {
 <button data-view="journal">🍽️<br>Journal</button>
 <button data-view="foods">📚<br>Aliments</button>
 <button data-view="progress">📈<br>Progrès</button>
+<button data-view="calendar">🗓️<br>Calendrier</button>
 <button data-view="settings">⚙️<br>Réglages</button>
 </nav>
 
@@ -306,6 +362,8 @@ const BASE_FOODS=[
 {id:"energy_ginseng500",name:"Boisson énergisante Ginseng+ — canette",unit:"1 canette (500 ml)",kcal:162,p:0.5,c:37,f:0.5,fav:true,builtin:true},
 {id:"wheat_wrap617",name:"Galette de blé précuite Aldi",unit:"1 galette (61,7 g)",kcal:191,p:6.1,c:32,f:4,fav:true,builtin:true},
 {id:"tomato_jouda100",name:"Concentré de tomate Jouda",unit:"100 g",kcal:135,p:4.71,c:15.5,f:0.85,fav:true,builtin:true},
+{id:"berries_mix100",name:"Mélange de fruits rouges surgelés",unit:"100 g",kcal:38,p:0.9,c:6.0,f:0.5,fav:true,builtin:true},
+{id:"thai_rice_raw60",name:"Riz thaï long grain cru",unit:"1 portion (60 g cru)",kcal:211,p:4.0,c:47.0,f:0.5,fav:true,builtin:true},
 
 /* === PRODUITS DÉJÀ PRÉSENTS === */
 {id:"coffee_sugar",name:"Café + 1 sachet de sucre",unit:"1 portion",kcal:20,p:0,c:5,f:0,fav:true,builtin:true},
@@ -370,12 +428,65 @@ function load(){
 let state=load();
 let selectedDate=dateKey(new Date());
 let activeView="home";
+let calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
 function foodById(id){return state.foods.find(f=>f.id===id)}
 function entries(k=selectedDate){return Array.isArray(state.diary[k])?state.diary[k]:[]}
 function totals(k=selectedDate){return entries(k).reduce((a,e)=>{a.kcal+=safeNum(e.kcal);a.p+=safeNum(e.p);a.c+=safeNum(e.c);a.f+=safeNum(e.f);return a},{kcal:0,p:0,c:0,f:0})}
 function currentWeight(){if(!state.weights.length)return state.settings.startWeight;return [...state.weights].sort((a,b)=>String(a.date).localeCompare(String(b.date))).at(-1).weight}
 function bmi(){const h=state.settings.heightCm/100;return h>0?currentWeight()/(h*h):0}
+function weightForDate(k){
+ const ws=[...state.weights].filter(w=>String(w.date)<=String(k)).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+ if(!ws.length)return null;
+ const exact=ws.find(w=>String(w.date)===String(k));
+ return exact?{weight:safeNum(exact.weight),exact:true,date:exact.date}:{weight:safeNum(ws.at(-1).weight),exact:false,date:ws.at(-1).date};
+}
+function fillSummary(prefix,k){
+ const t=totals(k),s=state.settings,w=weightForDate(k),d=parseDate(k);
+ const title=$(prefix+"Title"); if(title)title.textContent=d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+ const kcal=$(prefix+"Kcal"); if(kcal)kcal.textContent=Math.round(t.kcal);
+ const p=$(prefix+"P"); if(p)p.textContent=Math.round(t.p);
+ const c=$(prefix+"C"); if(c)c.textContent=Math.round(t.c);
+ const ks=$(prefix+"KcalSub"); if(ks)ks.textContent=`objectif ${s.kcalTarget} kcal • reste ${Math.max(0,Math.round(s.kcalTarget-t.kcal))}`;
+ const ps=$(prefix+"PSub"); if(ps)ps.textContent=`objectif ${s.proteinTarget} g • reste ${Math.max(0,Math.round(s.proteinTarget-t.p))} g`;
+ const we=$(prefix+"W"); if(we)we.textContent=w?fmt(w.weight,1):"—";
+ const ws=$(prefix+"WSub"); if(ws)ws.textContent=w?(w.exact?"pesée de ce jour":`dernier poids connu (${parseDate(w.date).toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit"})})`):"aucune pesée";
+}
+function renderJournalSummary(){
+ $("journalSummaryTitle").textContent=parseDate(selectedDate).toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+ fillSummary("journalSum",selectedDate);
+}
+function renderCalendarMeals(){
+ const box=$("calendarMeals"); if(!box)return; box.innerHTML="";
+ const all=entries(selectedDate);
+ if(!all.length){box.innerHTML='<div class="calendar-empty">Aucun aliment enregistré pour cette journée.</div>';return}
+ MEALS.forEach(meal=>{
+   const list=all.filter(e=>e.meal===meal); if(!list.length)return;
+   const kcal=list.reduce((a,e)=>a+safeNum(e.kcal),0);
+   const row=document.createElement("div");row.className="calendar-meal-row";
+   row.innerHTML=`<span>${esc(meal)}</span><span>${Math.round(kcal)} kcal</span>`;box.appendChild(row);
+ });
+}
+function renderCalendarSummary(){const t=$("calendarSummaryTitle");if(t)t.textContent=parseDate(selectedDate).toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});fillSummary("calSum",selectedDate);renderCalendarMeals()}
+function renderCalendar(){
+ const grid=$("calendarGrid"); if(!grid)return;
+ const year=calendarMonth.getFullYear(),month=calendarMonth.getMonth();
+ $("calendarMonthTitle").textContent=calendarMonth.toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
+ grid.innerHTML="";
+ ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(x=>{const h=document.createElement("div");h.className="cal-weekday";h.textContent=x;grid.appendChild(h)});
+ const first=new Date(year,month,1),offset=(first.getDay()+6)%7,start=new Date(year,month,1-offset);
+ const todayKey=dateKey(new Date());
+ for(let n=0;n<42;n++){
+   const d=new Date(start);d.setDate(start.getDate()+n);const k=dateKey(d),t=totals(k);
+   const b=document.createElement("button");b.className="cal-day";
+   if(d.getMonth()!==month)b.classList.add("out");if(k===todayKey)b.classList.add("today");if(k===selectedDate)b.classList.add("selected");
+   b.innerHTML=`<span class="cal-num">${d.getDate()}</span>${entries(k).length?'<span class="cal-dot"></span>':''}${entries(k).length?`<span class="cal-kcal">${Math.round(t.kcal)} kcal</span><span class="cal-prot">${Math.round(t.p)} g prot.</span>`:""}`;
+   b.addEventListener("click",()=>{selectedDate=k;calendarMonth=new Date(d.getFullYear(),d.getMonth(),1);renderCalendar();renderCalendarSummary()});
+   grid.appendChild(b);
+ }
+ renderCalendarSummary();
+}
+
 
 function greeting(){
  const n=new Date(),g=n.getHours()<18?"Bonjour":"Bonsoir";
@@ -392,6 +503,7 @@ function showView(v){
  if(v==="foods")renderFoods();
  if(v==="saved")renderSaved();
  if(v==="progress")renderProgress();
+ if(v==="calendar")renderCalendar();
  if(v==="settings")renderSettings();
  window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -429,6 +541,7 @@ function renderHome(){
 }
 
 function renderJournal(){
+ renderJournalSummary();
  $("journalDate").textContent=parseDate(selectedDate).toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
  const root=$("meals");root.innerHTML="";
  const all=entries();
@@ -1143,7 +1256,7 @@ function startVoice(){
 }
 
 
-function renderAll(){greeting();renderHome();renderJournal();renderFoods();renderSaved();renderProgress();renderSettings()}
+function renderAll(){greeting();renderHome();renderJournal();renderFoods();renderSaved();renderProgress();renderCalendar();renderSettings()}
 
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
 document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.close).close()));
@@ -1157,6 +1270,11 @@ $("quickFoods").addEventListener("click",()=>showView("foods"));
 $("prevDay").addEventListener("click",()=>{const d=parseDate(selectedDate);d.setDate(d.getDate()-1);selectedDate=dateKey(d);renderJournal()});
 $("nextDay").addEventListener("click",()=>{const d=parseDate(selectedDate);d.setDate(d.getDate()+1);selectedDate=dateKey(d);renderJournal()});
 $("todayBtn").addEventListener("click",()=>{selectedDate=dateKey(new Date());renderJournal()});
+$("calPrevMonth").addEventListener("click",()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1);renderCalendar()});
+$("calNextMonth").addEventListener("click",()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1);renderCalendar()});
+$("calendarTodayBtn").addEventListener("click",()=>{selectedDate=dateKey(new Date());calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);renderCalendar()});
+$("openSelectedJournal").addEventListener("click",()=>showView("journal"));
+
 $("copyYesterday").addEventListener("click",copyYesterday);
 $("saveMealBtn").addEventListener("click",openSaveMeal);
 
